@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "606052279829",
+    "firebase_url": "https://kasrtapp-8ee49-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "kasrtapp-8ee49",
+    "storage_bucket": "kasrtapp-8ee49.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:606052279829:android:c3b3133698c805841c501c",
+        "android_client_info": {
+          "package_name": "com.example.kasrtapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCR7lc7JvzUPn1_mm-f3FEZaZkQERAJZDI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:606052279829:android:84830f45281681cd1c501c",
+        "android_client_info": {
+          "package_name": "id.kasrt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCR7lc7JvzUPn1_mm-f3FEZaZkQERAJZDI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

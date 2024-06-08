@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E6E6E6"
+    tools:context=".LaporanActivity">
+
+    <!-- TextView untuk judul -->
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="LAPORAN KAS RT"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="24dp"
+        android:fontFamily="serif"
+        android:background="@drawable/gradient_background"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- TextView untuk Jumlah Iuran Bulanan -->
+    <TextView
+        android:id="@+id/jumlahIuranBulananTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:text="1. Jumlah Iuran Bulanan: "
+        android:textSize="18sp"
+        android:padding="16dp"
+        android:textStyle="bold"
+        android:gravity="start"
+        android:background="@drawable/bg_card_laporan"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView1"
+        android:paddingStart="5dp"
+        android:paddingEnd="10dp" />
+
+    <!-- RecyclerView untuk menampilkan daftar -->
+
+    <!-- TextView untuk Pemanfaatan -->
+    <TextView
+        android:id="@+id/pemanfaatanTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:text="2. Pemanfaatan Iuran    : "
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="start"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/jumlahIuranBulananTextView"
+        android:paddingStart="5dp"
+        android:paddingEnd="16dp" />
+
+
+    <!-- TextView untuk Pengeluaran -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_laporan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/bg_card_laporan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pemanfaatanTextView"
+        tools:listitem="@layout/item_pemanfaatan" />
+
+    <TextView
+        android:id="@+id/pengeluaranTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:text="3. Total Pengeluraan     : "
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="start"
+        android:padding="16dp"
+        android:background="@drawable/bg_card_laporan"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rv_laporan"
+        android:paddingStart="5dp"
+        android:paddingEnd="16dp" />
+
+    <!-- TextView untuk Total Iuran -->
+    <TextView
+        android:id="@+id/totalIuranTextView"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:text="4. Rekap Total Iuran         : "
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="start"
+        android:background="@drawable/bg_card_laporan"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pengeluaranTextView"
+        android:paddingStart="5dp"
+        android:paddingEnd="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
