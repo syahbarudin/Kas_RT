@@ -1,8 +1,11 @@
 package id.kasrt
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -21,6 +24,8 @@ class SplashActivity : AppCompatActivity() {
     private val SPLASH_TIME_OUT: Long = 12000
     private lateinit var binding: ActivitySplashBinding
     private var counter = 0
+    private var isFirstTime = true // Flag to track if it's the first time opening the app
+    private var isConnected = false // Flag to track internet connection status
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,23 +57,42 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkFirebaseConnection() {
-        val connectedRef: DatabaseReference = FirebaseDatabase.getInstance().getReference(".info/connected")
-        connectedRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val connected = snapshot.getValue(Boolean::class.java) ?: false
-                if (connected) {
-                    Handler().postDelayed({
-                        startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
-                        finish()
-                    }, SPLASH_TIME_OUT)
-                } else {
-                    Toast.makeText(this@SplashActivity, "Tidak ada koneksi. Mohon periksa jaringan anda dan silahkan coba kembali.", Toast.LENGTH_LONG).show()
-                }
-            }
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        val connected = networkInfo != null && networkInfo.isConnected
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@SplashActivity, "Error periksa koneksi anda: ${error.message}", Toast.LENGTH_LONG).show()
+        if (isFirstTime) {
+            if (!connected) {
+                showErrorAndClose()
+            } else {
+                isConnected = true
+                Handler(Looper.getMainLooper()).postDelayed({
+                    startNextActivity()
+                }, SPLASH_TIME_OUT)
             }
-        })
+            isFirstTime = false
+        } else {
+            if (!connected) {
+                isConnected = false
+                startNextActivity()
+            } else {
+                isConnected = true
+                startNextActivity()
+            }
+        }
+    }
+
+    private fun startNextActivity() {
+        if (isConnected) {
+            startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+            finish()
+        }
+    }
+
+    private fun showErrorAndClose() {
+        Toast.makeText(this@SplashActivity, "Tidak ada koneksi. Mohon periksa jaringan anda dan silahkan coba kembali.", Toast.LENGTH_LONG).show()
+        Handler(Looper.getMainLooper()).postDelayed({
+            finish()
+        }, 10000)
     }
 }
