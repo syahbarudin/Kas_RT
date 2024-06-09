@@ -34,7 +34,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".MenuActivity2"
+            android:name=".MenuActivity"
             android:exported="false"/>
 
         <activity android:name=".RegisterActivity"
@@ -47,6 +47,7 @@
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
+
         <activity android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>

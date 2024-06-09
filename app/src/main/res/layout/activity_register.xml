@@ -48,7 +48,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/edt_email_register"
+                android:id="@+id/edtEmailRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
@@ -60,6 +60,19 @@
                 android:layout_height="wrap_content"
                 android:hint="Password"
                 android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/edtNIKRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Masukkan NIK"
+                android:inputType="number" />
+            <EditText
+                android:id="@+id/edtUniqueCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Masukkan Kode"
+                android:inputType="text" />
 
             <Button
                 android:id="@+id/btn_register"

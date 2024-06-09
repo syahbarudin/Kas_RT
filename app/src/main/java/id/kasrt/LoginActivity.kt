@@ -7,12 +7,11 @@ import android.util.Patterns
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import id.kasrt.databinding.ActivityLoginBinding
-import androidx.activity.OnBackPressedCallback
 
 class LoginActivity : AppCompatActivity() {
 
-    lateinit var binding : ActivityLoginBinding
-    lateinit var auth : FirebaseAuth
+    private lateinit var binding: ActivityLoginBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -35,47 +34,44 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.edtEmailLogin.text.toString()
             val password = binding.edtPasswordLogin.text.toString()
 
-            //Validasi email
-            if (email.isEmpty()){
-                binding.edtEmailLogin.error = "Email Harus Diisi"
+            // Validasi email
+            if (email.isEmpty()) {
+                binding.edtEmailLogin.error = "Email harus diisi"
                 binding.edtEmailLogin.requestFocus()
                 return@setOnClickListener
             }
 
-            //Validasi email tidak sesuai
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                binding.edtPasswordLogin.error = "Email Tidak Valid"
+            // Validasi email tidak sesuai format
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                binding.edtEmailLogin.error = "Format email tidak valid"
+                binding.edtEmailLogin.requestFocus()
+                return@setOnClickListener
+            }
+
+            // Validasi password
+            if (password.isEmpty()) {
+                binding.edtPasswordLogin.error = "Password harus diisi"
                 binding.edtPasswordLogin.requestFocus()
                 return@setOnClickListener
             }
 
-            //Validasi password
-            if (password.isEmpty()){
-                binding.edtPasswordLogin.error = "Password Harus Diisi"
-                binding.edtPasswordLogin.requestFocus()
-                return@setOnClickListener
-            }
-
-            LoginFirebase(email,password)
+            // Lakukan proses login
+            loginUserWithEmail(email, password)
         }
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                finishAffinity()
-            }})
     }
 
-    private fun LoginFirebase(email: String, password: String) {
+    private fun loginUserWithEmail(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) {
-                if (it.isSuccessful) {
-                    Toast.makeText(this, "Selamat datang $email", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MenuActivity2::class.java)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    Toast.makeText(this, "Selamat datang, ${user?.email}", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MenuActivity::class.java)
                     startActivity(intent)
+                    finish()
                 } else {
-                    Toast.makeText(this, "${it.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
-
-
 }
