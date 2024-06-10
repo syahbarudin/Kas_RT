@@ -1,10 +1,10 @@
 package id.kasrt
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import id.kasrt.databinding.ActivityLoginBinding
 
@@ -12,6 +12,8 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
+    private var backPressedTime: Long = 0
+    private lateinit var backToast: Toast
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -73,5 +75,19 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    override fun onBackPressed() {
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            if (::backToast.isInitialized) {
+                backToast.cancel()
+            }
+            super.onBackPressed()
+            finishAffinity() // This will close the app
+        } else {
+            backToast = Toast.makeText(this, "Tekan kembali lagi untuk keluar", Toast.LENGTH_SHORT)
+            backToast.show()
+        }
+        backPressedTime = System.currentTimeMillis()
     }
 }

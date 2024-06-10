@@ -43,6 +43,15 @@
             android:exported="false"/>
         <activity android:name=".ChangeEmailActivity"
             android:exported="false"/>
+        <activity android:name=".QrScannerActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".CustomCaptureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+
 
         <activity
             android:name=".LoginActivity"

@@ -79,6 +79,13 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun checkUniqueCodeAndRegister(uniqueCode: CharSequence, email: String, password: String, nik: String) {
         databaseReference.child(uniqueCode.toString()).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

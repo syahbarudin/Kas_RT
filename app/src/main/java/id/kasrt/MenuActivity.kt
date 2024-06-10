@@ -33,4 +33,16 @@ class MenuActivity : AppCompatActivity() {
         val intent = Intent(this, NotificationActivity::class.java)
         startActivity(intent)
     }
+
+    fun onQrScannerClicked(view: View) {
+        val intent = Intent(this, QrScannerActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }
