@@ -28,6 +28,11 @@ class RegisterActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         databaseReference = FirebaseDatabase.getInstance().getReference("unique_codes")
 
+        binding.tvToLogin.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.btnRegister.setOnClickListener {
             val email = binding.edtEmailRegister.text.toString().trim()
             val password = binding.edtPasswordRegister.text.toString().trim()
