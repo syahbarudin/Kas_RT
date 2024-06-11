@@ -46,6 +46,9 @@
         <activity android:name=".QrScannerActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
+
+        <activity android:name=".ChatActivity"
+            android:exported="false"/>
         <activity
             android:name=".CustomCaptureActivity"
             android:screenOrientation="portrait"
