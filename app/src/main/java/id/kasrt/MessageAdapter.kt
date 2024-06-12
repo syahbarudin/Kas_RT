@@ -5,12 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import id.kasrt.model.Message
 
-
-
-
-class MessageAdapter
-    (private val messages: MutableList<Message>, private val currentUserId: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MessageAdapter(
+    private val messages: List<Message>,
+    private val currentUserId: String,
+    private val onMessageLongClick: (Message) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_SENT = 1
     private val VIEW_TYPE_RECEIVED = 2
@@ -18,7 +19,7 @@ class MessageAdapter
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_TYPE_SENT) {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.item_message_sent, parent, false)
-            SentMessageViewHolder(view)
+            SentMessageViewHolder(view, onMessageLongClick)
         } else {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.item_message_received, parent, false)
             ReceivedMessageViewHolder(view)
@@ -45,13 +46,17 @@ class MessageAdapter
         }
     }
 
-    class SentMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class SentMessageViewHolder(itemView: View, private val onMessageLongClick: (Message) -> Unit) : RecyclerView.ViewHolder(itemView) {
         private val messageTextView: TextView = itemView.findViewById(R.id.textViewMessage)
         private val senderNameTextView: TextView = itemView.findViewById(R.id.textViewSenderName)
 
         fun bind(message: Message) {
             messageTextView.text = message.messageText
             senderNameTextView.text = message.senderName
+            itemView.setOnLongClickListener {
+                onMessageLongClick(message)
+                true
+            }
         }
     }
 

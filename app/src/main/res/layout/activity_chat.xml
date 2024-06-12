@@ -7,7 +7,7 @@
     tools:context=".ChatActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewChat"
+        android:id="@+id/recyclerViewMessages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -27,7 +27,7 @@
             android:hint="Type a message" />
 
         <Button
-            android:id="@+id/buttonSendMessage"
+            android:id="@+id/buttonSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Send" />
