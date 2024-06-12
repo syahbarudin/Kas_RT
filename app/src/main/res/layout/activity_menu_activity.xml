@@ -177,7 +177,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:layout_margin="5dp"
-                android:src="@drawable/qr_scan" />
+                android:src="@drawable/qr_scanner" />
 
             <TextView
                 android:id="@+id/textViewQrScanner"
