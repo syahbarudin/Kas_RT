@@ -11,5 +11,7 @@
     <color name="skyblue">#87CEEB</color>
     <color name="cream">#FEE6A8</color>
     <color name="light_blue">#ADD8E6</color>
+    <color name="darker_grey">#464E51</color>
+    <color name="ColorSent">#DCF8C6</color>
 
 </resources>

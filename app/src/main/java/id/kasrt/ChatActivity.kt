@@ -1,20 +1,27 @@
 package id.kasrt
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import id.kasrt.databinding.ActivityChatBinding
-import id.kasrt.model.Message
+
+data class Message(
+    val messageId: String = "",
+    val senderId: String = "",
+    val senderName: String = "",
+    val messageText: String = "",
+    val timestamp: Long = 0L
+)
 
 class ChatActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityChatBinding
-    private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
     private lateinit var messageAdapter: MessageAdapter
-    private lateinit var messageList: ArrayList<Message>
+    private val messages = mutableListOf<Message>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,53 +31,52 @@ class ChatActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().getReference("messages")
 
-        messageList = ArrayList()
-        messageAdapter = MessageAdapter(messageList)
-
-        binding.recyclerViewMessages.apply {
+        messageAdapter = MessageAdapter(messages, auth.currentUser?.uid ?: "")
+        binding.recyclerViewChat.apply {
             layoutManager = LinearLayoutManager(this@ChatActivity)
             adapter = messageAdapter
         }
 
-        binding.buttonSend.setOnClickListener {
+        binding.buttonSendMessage.setOnClickListener {
             val messageText = binding.editTextMessage.text.toString().trim()
             if (messageText.isNotEmpty()) {
                 sendMessage(messageText)
+                binding.editTextMessage.text.clear()
             }
         }
 
-        retrieveMessages()
+        listenForMessages()
     }
 
     private fun sendMessage(messageText: String) {
-        val messageId = database.push().key
-        val message = Message(messageText, auth.currentUser?.uid ?: "")
+        val userId = auth.currentUser?.uid ?: return
+        val userEmail = auth.currentUser?.email ?: "Unknown User"
 
-        messageId?.let {
-            database.child(it).setValue(message).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    binding.editTextMessage.text.clear()
-                } else {
-                    Toast.makeText(this, "Failed to send message: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+        val message = Message(
+            messageId = database.push().key ?: "",
+            senderId = userId,
+            senderName = userEmail,
+            messageText = messageText,
+            timestamp = System.currentTimeMillis()
+        )
+        database.child(message.messageId).setValue(message)
     }
 
-    private fun retrieveMessages() {
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                messageList.clear()
-                for (messageSnapshot in snapshot.children) {
-                    val message = messageSnapshot.getValue(Message::class.java)
-                    message?.let { messageList.add(it) }
+    private fun listenForMessages() {
+        database.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val message = snapshot.getValue(Message::class.java)
+                if (message != null) {
+                    messages.add(message)
+                    messageAdapter.notifyItemInserted(messages.size - 1)
+                    binding.recyclerViewChat.scrollToPosition(messages.size - 1)
                 }
-                messageAdapter.notifyDataSetChanged()
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@ChatActivity, "Failed to retrieve messages: ${error.message}", Toast.LENGTH_SHORT).show()
-            }
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onChildRemoved(snapshot: DataSnapshot) {}
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 }

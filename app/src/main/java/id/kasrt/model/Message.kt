@@ -1,6 +1,9 @@
 package id.kasrt.model
 
 data class Message(
-    val message: String = "",
-    val senderId: String = ""
+    val messageId: String = "",
+    val senderId: String = "",
+    val senderName: String = "",
+    val messageText: String = "",
+    val timestamp: Long = 0L
 )
