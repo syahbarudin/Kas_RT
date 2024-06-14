@@ -1,15 +1,15 @@
 package id.kasrt.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ImageView;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
 import id.kasrt.R;
 
 public class fragmentmain extends AppCompatActivity {
@@ -35,7 +35,14 @@ public class fragmentmain extends AppCompatActivity {
 
         // Simulate profile data
         profileImage.setImageResource(R.drawable.ic_profile_placeholder);
-        usernameText.setText("Username");
+
+        // Initialize Firebase Auth
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String email = auth.getCurrentUser().getEmail();
+        if (email != null) {
+            String username = email.substring(0, email.indexOf("@"));
+            usernameText.setText(username);
+        }
 
         // Initialize ViewPager2 and Adapter
         viewPagerAdapter = new ViewPagerAdapter(this);
@@ -93,5 +100,12 @@ public class fragmentmain extends AppCompatActivity {
         } else {
             toolbar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Finish the current activity and all parent activities
+        super.onBackPressed();
+        finishAffinity();
     }
 }

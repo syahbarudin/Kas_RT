@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import id.kasrt.databinding.ActivityLoginBinding
+import id.kasrt.ui.fragmentmain
 
 class LoginActivity : AppCompatActivity() {
 
@@ -68,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     Toast.makeText(this, "Selamat datang, ${user?.email}", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MenuActivity::class.java)
+                    val intent = Intent(this, fragmentmain::class.java)
                     startActivity(intent)
                     finish()
                 } else {

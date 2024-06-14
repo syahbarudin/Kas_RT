@@ -1,6 +1,7 @@
 package id.kasrt
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import id.kasrt.model.ResponseUser
 import id.kasrt.network.ApiConfig
+import id.kasrt.ui.fragmentmain
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -75,5 +77,12 @@ class LaporanActivity : AppCompatActivity() {
                 t.printStackTrace()
             }
         })
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        // Kembali langsung ke halaman beranda (MenuActivity)
+        val intent = Intent(this, fragmentmain::class.java)
+        startActivity(intent)
+        finish()
     }
 }

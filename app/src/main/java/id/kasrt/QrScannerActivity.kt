@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import id.kasrt.databinding.ActivityQrScannerBinding
+import id.kasrt.ui.fragmentmain
 
 class QrScannerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityQrScannerBinding
@@ -75,7 +76,7 @@ class QrScannerActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         // Kembali langsung ke halaman beranda (MenuActivity)
-        val intent = Intent(this, MenuActivity::class.java)
+        val intent = Intent(this, fragmentmain::class.java)
         startActivity(intent)
         finish()
     }
