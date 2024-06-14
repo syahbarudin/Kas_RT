@@ -26,7 +26,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Type a message" />
+            android:hint="Type a message"
+            android:textColor="@color/black"
+            android:textStyle="italic"/>
 
         <Button
             android:id="@+id/buttonSend"

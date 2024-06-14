@@ -124,6 +124,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/textView1"
@@ -192,4 +193,15 @@
                 tools:ignore="TextSizeCheck" />
         </LinearLayout>
         </LinearLayout>
+
+    <Button
+        android:id="@+id/alertButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="305dp"
+        android:gravity="end"
+        android:onClick="showAlert"
+        android:text="Allert" />
 </RelativeLayout>

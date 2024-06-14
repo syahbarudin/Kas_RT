@@ -1,6 +1,8 @@
 package id.kasrt
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,104 +11,77 @@ import com.google.firebase.database.*
 import id.kasrt.databinding.ActivityChatBinding
 import id.kasrt.model.Message
 
-
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
-    private lateinit var messageAdapter: MessageAdapter
-    private val messages = mutableListOf<Message>()
+    private lateinit var adapter: MessageAdapter
+    private lateinit var messages: MutableList<Message>
+    private var currentUser: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityChatBinding.inflate(layoutInflater)
+        binding = ActivityChatBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().getReference("messages")
+        messages = mutableListOf()
+        adapter = MessageAdapter(messages) { message -> deleteMessage(message) }
 
-        messageAdapter = MessageAdapter(messages, auth.currentUser?.uid ?: "") { message ->
-            showDeleteMessageDialog(message)
-        }
-        binding.recyclerViewMessages.apply {
-            layoutManager = LinearLayoutManager(this@ChatActivity)
-            adapter = messageAdapter
-        }
+        binding.recyclerViewMessages.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewMessages.adapter = adapter
 
         binding.buttonSend.setOnClickListener {
-            val messageText = binding.editTextMessage.text.toString().trim()
+            val messageText = binding.editTextMessage.text.toString()
             if (messageText.isNotEmpty()) {
                 sendMessage(messageText)
                 binding.editTextMessage.text.clear()
             }
         }
 
-        listenForMessages()
+        // Mengambil nama user dari email
+        currentUser = auth.currentUser?.email?.substringBefore("@")
+
+        loadMessages()
     }
 
     private fun sendMessage(messageText: String) {
-        val userId = auth.currentUser?.uid ?: return
-        val userEmail = auth.currentUser?.email ?: "Unknown User"
-
         val message = Message(
-            messageId = database.push().key ?: "",
-            senderId = userId,
-            senderName = userEmail,
+            senderId = auth.currentUser?.uid ?: "",
+            senderName = auth.currentUser?.email ?: "Unknown User",
             messageText = messageText,
             timestamp = System.currentTimeMillis()
         )
-        database.child(message.messageId).setValue(message)
+        database.push().setValue(message)
     }
 
-    private fun listenForMessages() {
-        database.addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val message = snapshot.getValue(Message::class.java)
-                if (message != null) {
-                    messages.add(message)
-                    messageAdapter.notifyItemInserted(messages.size - 1)
-                    binding.recyclerViewMessages.scrollToPosition(messages.size - 1)
+    private fun loadMessages() {
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                messages.clear()
+                for (messageSnapshot in snapshot.children) {
+                    val message = messageSnapshot.getValue(Message::class.java)
+                    message?.let { messages.add(it) }
                 }
+                adapter.notifyDataSetChanged()
+                binding.recyclerViewMessages.scrollToPosition(messages.size - 1)
             }
 
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                val message = snapshot.getValue(Message::class.java)
-                if (message != null) {
-                    val index = messages.indexOfFirst { it.messageId == message.messageId }
-                    if (index != -1) {
-                        messages.removeAt(index)
-                        messageAdapter.notifyItemRemoved(index)
-                    }
-                }
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@ChatActivity, "Gagal memuat pesan", Toast.LENGTH_SHORT).show()
             }
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onCancelled(error: DatabaseError) {}
         })
     }
 
-    private fun showDeleteMessageDialog(message: Message) {
-        // Tampilkan dialog konfirmasi hapus pesan
-        val dialogBuilder = androidx.appcompat.app.AlertDialog.Builder(this)
-        dialogBuilder.setMessage("Apakah Anda yakin ingin menghapus pesan ini?")
-            .setCancelable(false)
-            .setPositiveButton("Ya") { dialog, id ->
-                deleteMessage(message)
-            }
-            .setNegativeButton("Tidak") { dialog, id ->
-                dialog.cancel()
-            }
-        val alert = dialogBuilder.create()
-        alert.setTitle("Hapus Pesan")
-        alert.show()
-    }
-
     private fun deleteMessage(message: Message) {
-        database.child(message.messageId).removeValue().addOnSuccessListener {
-            Toast.makeText(this, "Pesan dihapus", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener {
-            Toast.makeText(this, "Gagal menghapus pesan", Toast.LENGTH_SHORT).show()
+        database.child(message.messageId).removeValue().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(this@ChatActivity, "Pesan berhasil dihapus", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@ChatActivity, "Gagal menghapus pesan", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

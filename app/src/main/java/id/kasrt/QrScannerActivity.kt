@@ -62,7 +62,7 @@ class QrScannerActivity : AppCompatActivity() {
 
     private fun handleQrResult(result: String) {
         if (result.startsWith("http://") || result.startsWith("https://")) {
-            // Jika hasil QR code adalah tautan, langsung buka tautan
+            // Jika hasil QR code adalah tautan, langsung buka link
             openUrl(Uri.parse(result))
         } else {
             // Jika tidak, tampilkan hasil QR code
