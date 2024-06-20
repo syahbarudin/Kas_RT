@@ -7,8 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import id.kasrt.model.DataItem
 
-class PemanfaatanAdpater(private val pemanfaatan:MutableList<DataItem>) :
-    RecyclerView.Adapter<PemanfaatanAdpater.ListViewHolder>() {
+class PemanfaatanAdapater(private val pemanfaatan:MutableList<DataItem>) :
+    RecyclerView.Adapter<PemanfaatanAdapater.ListViewHolder>() {
     constructor() : this(mutableListOf())
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view: View =

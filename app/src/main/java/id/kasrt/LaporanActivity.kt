@@ -17,7 +17,7 @@ import retrofit2.Response
 
 class LaporanActivity : AppCompatActivity() {
 
-    private lateinit var adapter: PemanfaatanAdpater
+    private lateinit var adapter: PemanfaatanAdapater
     private lateinit var rv_laporan: RecyclerView
     private lateinit var jumlahIuranBulananTextView: TextView
     private lateinit var totalIuranTextView: TextView
@@ -25,14 +25,14 @@ class LaporanActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_laporan)
+        setContentView(R.layout.fragment_tab3)
 
         rv_laporan = findViewById(R.id.rv_laporan)
         jumlahIuranBulananTextView = findViewById(R.id.jumlahIuranBulananTextView)
         totalIuranTextView = findViewById(R.id.totalIuranTextView)
         pengeluaranTextView = findViewById(R.id.pengeluaranTextView)
 
-        adapter = PemanfaatanAdpater(mutableListOf())
+        adapter = PemanfaatanAdapater(mutableListOf())
 
         rv_laporan.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rv_laporan.adapter = adapter
