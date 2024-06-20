@@ -86,7 +86,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:text="3. Total Pengeluraan     : "
+        android:text="3. Total Pengeluaran : "
         android:textSize="18sp"
         android:textStyle="bold"
         android:gravity="start"
@@ -95,8 +95,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rv_laporan"
-        android:paddingStart="5dp"
-        android:paddingEnd="16dp" />
+        app:layout_constraintBottom_toTopOf="@+id/totalIuranTextView" /> <!-- Sesuaikan bottom constraint agar ada ruang untuk view berikutnya -->
+
 
     <!-- TextView untuk Total Iuran -->
     <TextView
