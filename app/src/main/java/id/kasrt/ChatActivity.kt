@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -76,30 +75,18 @@ class ChatActivity : AppCompatActivity() {
         })
     }
 
-    private fun showDeleteConfirmationDialog(message: Message) {
-        AlertDialog.Builder(this)
-            .setMessage("Apakah Anda yakin ingin menghapus pesan ini?")
-            .setPositiveButton("Ya") { _, _ -> deleteMessage(message) }
-            .setNegativeButton("Tidak", null)
-            .show()
-    }
     private fun deleteMessage(message: Message) {
-        // Hapus pesan dari Firebase database
-        database.child(message.messageId).removeValue().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Toast.makeText(
-                    this@ChatActivity,
-                    "Pesan berhasil dihapus",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                Toast.makeText(
-                    this@ChatActivity,
-                    "Gagal menghapus pesan",
-                    Toast.LENGTH_SHORT
-                ).show()
+        // Hanya pengirim pesan yang dapat menghapusnya
+        if (message.senderId == auth.currentUser?.uid) {
+            database.child(message.messageId).removeValue().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this@ChatActivity, "Pesan berhasil dihapus", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@ChatActivity, "Gagal menghapus pesan", Toast.LENGTH_SHORT).show()
+                }
             }
+        } else {
+            Toast.makeText(this@ChatActivity, "Anda tidak dapat menghapus pesan ini", Toast.LENGTH_SHORT).show()
         }
     }
-
 }
