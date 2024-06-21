@@ -76,12 +76,17 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun deleteMessage(message: Message) {
-        database.child(message.messageId).removeValue().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Toast.makeText(this@ChatActivity, "Pesan berhasil dihapus", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this@ChatActivity, "Gagal menghapus pesan", Toast.LENGTH_SHORT).show()
+        // Hanya pengirim pesan yang dapat menghapusnya
+        if (message.senderId == auth.currentUser?.uid) {
+            database.child(message.messageId).removeValue().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this@ChatActivity, "Pesan berhasil dihapus.", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@ChatActivity, "Gagal menghapus pesan", Toast.LENGTH_SHORT).show()
+                }
             }
+        } else {
+            Toast.makeText(this@ChatActivity, "Anda tidak dapat menghapus pesan ini", Toast.LENGTH_SHORT).show()
         }
     }
 }
