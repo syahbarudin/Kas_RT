@@ -94,7 +94,7 @@ public class fragmentmain extends AppCompatActivity {
     }
 
     private void updateToolbarVisibility(int tabPosition) {
-        if (tabPosition == 0 || tabPosition == 4) {
+        if (tabPosition == 0 ) {
             setSupportActionBar(toolbar);
             toolbar.setVisibility(View.VISIBLE);
         } else {
