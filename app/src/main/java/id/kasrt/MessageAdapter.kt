@@ -62,12 +62,11 @@ class MessageAdapter(
                 true
             }
 
-            // Set the checkmark status
-            holder.imgStatus.visibility = View.VISIBLE
+            // Set status icon
             when (message.status) {
-                "Terkirim" -> holder.imgStatus.setImageResource(R.drawable.ic_check_1_gray)
-                "Diterima" -> holder.imgStatus.setImageResource(R.drawable.ic_check_2_gray)
-                "Dibaca" -> holder.imgStatus.setImageResource(R.drawable.ic_check_2_blue)
+                "sent" -> holder.imgStatus.setImageResource(R.drawable.ic_check_1_gray)
+                "delivered" -> holder.imgStatus.setImageResource(R.drawable.ic_check_2_gray)
+                "read" -> holder.imgStatus.setImageResource(R.drawable.ic_check_2_blue)
             }
         } else if (holder is ReceivedMessageViewHolder) {
             holder.tvSenderName.text = senderName
@@ -79,6 +78,7 @@ class MessageAdapter(
             }
         }
     }
+
 
     override fun getItemCount(): Int {
         return messages.size
