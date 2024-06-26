@@ -15,5 +15,7 @@
     <color name="ColorSent">#DCF8C6</color>
     <color name="gray">#808080</color>
     <color name="dark_blue">#00008B</color>
+    <color name="colorPrimary">#1414b8</color>
+
 
 </resources>

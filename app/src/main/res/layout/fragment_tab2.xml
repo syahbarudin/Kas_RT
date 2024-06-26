@@ -1,29 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Tab2">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <ScrollView
+    <!-- Judul Pembayaran -->
+    <TextView
+        android:id="@+id/textTitlePayment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:text="Pembayaran"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:gravity="center">
+    <!-- Informasi Tagihan -->
+    <TextView
+        android:id="@+id/textInvoiceInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tagihan: Rp 500.000"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="BAYAR DISINI"
-                android:textSize="18sp" />
+    <!-- Input Jumlah Pembayaran -->
+    <EditText
+        android:id="@+id/editTextAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Masukkan jumlah pembayaran"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="16dp"/>
 
-        </LinearLayout>
+    <!-- Tombol Bayar -->
+    <Button
+        android:id="@+id/buttonPay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bayar Sekarang"
+        android:textSize="18sp"
+        android:layout_marginTop="24dp"/>
 
-    </ScrollView>
-
-</FrameLayout>
+</LinearLayout>

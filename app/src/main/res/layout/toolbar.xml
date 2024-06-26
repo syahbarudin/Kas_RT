@@ -25,7 +25,7 @@
                 android:layout_height="48dp"
                 android:layout_alignParentStart="true"
                 android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_profile_placeholder" />
+                android:src="@drawable/icon_avatar" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
