@@ -3,11 +3,11 @@ package id.kasrt
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import id.kasrt.model.Message
-
 
 class MessageAdapter(
     private val messages: List<Message>,
@@ -22,6 +22,7 @@ class MessageAdapter(
         val tvSenderName: TextView = itemView.findViewById(R.id.tvSenderName)
         val tvMessageText: TextView = itemView.findViewById(R.id.tvMessageText)
         val tvTimestamp: TextView = itemView.findViewById(R.id.tvTimestamp)
+        val imgStatus: ImageView = itemView.findViewById(R.id.imgStatus)
     }
 
     inner class ReceivedMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -59,6 +60,14 @@ class MessageAdapter(
             holder.itemView.setOnLongClickListener {
                 onLongClick(message)
                 true
+            }
+
+            // Set the checkmark status
+            holder.imgStatus.visibility = View.VISIBLE
+            when (message.status) {
+                "Terkirim" -> holder.imgStatus.setImageResource(R.drawable.ic_check_1_gray)
+                "Diterima" -> holder.imgStatus.setImageResource(R.drawable.ic_check_2_gray)
+                "Dibaca" -> holder.imgStatus.setImageResource(R.drawable.ic_check_2_blue)
             }
         } else if (holder is ReceivedMessageViewHolder) {
             holder.tvSenderName.text = senderName

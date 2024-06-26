@@ -1,4 +1,5 @@
-package id.kasrt;
+package id.kasrt
+
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -19,8 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.messaging.FirebaseMessaging
-
 import id.kasrt.databinding.ActivityMainBinding
+import id.kasrt.model.DataItem
 import id.kasrt.model.ResponseUser
 import id.kasrt.network.ApiConfig
 import retrofit2.Call
@@ -31,7 +32,7 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: UserAdapter
-    private lateinit var rv_users: RecyclerView
+    private lateinit var rvUsers: RecyclerView
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private val notificationManager: NotificationManager by lazy {
@@ -43,11 +44,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        rv_users = findViewById(R.id.rv_users)
+        rvUsers = findViewById(R.id.rv_users)
         adapter = UserAdapter(mutableListOf())
 
-        rv_users.layoutManager = LinearLayoutManager(this)
-        rv_users.adapter = adapter
+        rvUsers.layoutManager = LinearLayoutManager(this)
+        rvUsers.adapter = adapter
 
         getUser()
 
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             if (granted) {
                 Snackbar.make(
                     findViewById<View>(android.R.id.content).rootView,
-                    "Permission Notifikasi Sudah Aktif",
+                    "Notification Permission Granted",
                     Snackbar.LENGTH_LONG
                 ).show()
             } else {
@@ -78,20 +79,21 @@ class MainActivity : AppCompatActivity() {
         val apiService = ApiConfig.getApiService()
         val client = apiService.getUsers()
 
-        client.enqueue(object : Callback<ResponseUser> {
-            override fun onResponse(call: Call<ResponseUser>, response: Response<ResponseUser>) {
+        client.enqueue(object : Callback<ResponseUser<List<DataItem>>> {
+            override fun onResponse(call: Call<ResponseUser<List<DataItem>>>, response: Response<ResponseUser<List<DataItem>>>) {
                 if (response.isSuccessful) {
-                    val dataArray = response.body()?.data
-                    if (dataArray != null) {
-                        adapter.setUsers(dataArray)
+                    val responseUser = response.body()
+                    responseUser?.let {
+                        val dataList = it.data // Ambil data dari response
+                        adapter.setUsers(dataList)
                     }
                 } else {
-                    Toast.makeText(this@MainActivity, "Failed to retrieve data", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(this@MainActivity, "Failed to retrieve data", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<ResponseUser>, t: Throwable) {
+
+            override fun onFailure(call: Call<ResponseUser<List<DataItem>>>, t: Throwable) {
                 Toast.makeText(this@MainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
                 t.printStackTrace()
             }
@@ -111,7 +113,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createToken() {
-        val TAG = "FCM__TOKEN"
+        val TAG = "FCM_TOKEN"
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w(TAG, "Fetching FCM registration token failed", task.exception)

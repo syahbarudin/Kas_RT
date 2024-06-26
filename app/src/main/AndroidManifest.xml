@@ -24,12 +24,7 @@
         <activity
             android:name=".NotificationActivity"
             android:exported="false" />
-        <activity
-            android:name=".PemanfaatanAdpater"
-            android:exported="false" />
-        <activity
-            android:name=".LaporanActivity"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="false" />
@@ -48,7 +43,8 @@
         <activity android:name=".ChatActivity"
             android:exported="false"/>
 
-        <activity android:name=".ui.fragmentmain"/>
+        <activity android:name=".ui.fragmentmain"
+            android:exported="false"/>
         <activity
             android:name=".CustomCaptureActivity"
             android:screenOrientation="portrait"

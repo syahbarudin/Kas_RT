@@ -1,3 +1,5 @@
 package id.kasrt.model
 
-    data class ResponseUser(val data: List<DataItem>)
+data class ResponseUser<T>(
+    val data: T
+)

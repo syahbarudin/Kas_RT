@@ -78,6 +78,7 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (backPressedTime + 2000 > System.currentTimeMillis()) {
             if (::backToast.isInitialized) {

@@ -3,8 +3,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp"
-    android:background="@drawable/ripple_effect"
-    >
+    android:background="@drawable/ripple_effect">
 
     <TextView
         android:id="@+id/tvSenderName"
@@ -24,12 +23,25 @@
         android:textColor="@color/black"
         android:layout_gravity="end"/>
 
-    <TextView
-        android:id="@+id/tvTimestamp"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="12:00 PM"
-        android:textSize="12sp"
-        android:textColor="@color/gray"
-        android:layout_gravity="end"/>
+        android:orientation="horizontal"
+        android:layout_gravity="end">
+
+        <TextView
+            android:id="@+id/tvTimestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12:00 PM"
+            android:textSize="12sp"
+            android:textColor="@color/gray"/>
+
+        <ImageView
+            android:id="@+id/imgStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/ic_check_1_gray" />
+    </LinearLayout>
 </LinearLayout>

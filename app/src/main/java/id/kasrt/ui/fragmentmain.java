@@ -10,16 +10,15 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Objects;
+
 import id.kasrt.R;
 
 public class fragmentmain extends AppCompatActivity {
 
-    private TabLayout tabLayout;
     private Toolbar toolbar;
     private ViewPager2 viewPager2;
-    private ViewPagerAdapter viewPagerAdapter;
-    private ImageView profileImage;
-    private TextView usernameText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,25 +26,25 @@ public class fragmentmain extends AppCompatActivity {
         setContentView(R.layout.activity_fragmentmain);
 
         // Initialize Views
-        tabLayout = findViewById(R.id.tabLayout);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
         viewPager2 = findViewById(R.id.viewPager);
         toolbar = findViewById(R.id.toolbar);
-        profileImage = toolbar.findViewById(R.id.profile_image);
-        usernameText = toolbar.findViewById(R.id.username_text);
+        ImageView profileImage = toolbar.findViewById(R.id.profile_image);
+        TextView usernameText = toolbar.findViewById(R.id.username_text);
 
         // Simulate profile data
         profileImage.setImageResource(R.drawable.ic_profile_placeholder);
 
         // Initialize Firebase Auth
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        String email = auth.getCurrentUser().getEmail();
+        String email = Objects.requireNonNull(auth.getCurrentUser()).getEmail();
         if (email != null) {
             String username = email.substring(0, email.indexOf("@"));
             usernameText.setText(username);
         }
 
         // Initialize ViewPager2 and Adapter
-        viewPagerAdapter = new ViewPagerAdapter(this);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this);
         viewPager2.setAdapter(viewPagerAdapter);
 
         // Disable swipe animation on ViewPager2
