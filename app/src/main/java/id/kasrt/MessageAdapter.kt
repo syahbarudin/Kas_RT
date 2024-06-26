@@ -57,16 +57,14 @@ class MessageAdapter(
             holder.tvSenderName.text = senderName
             holder.tvMessageText.text = message.messageText
             holder.tvTimestamp.text = android.text.format.DateFormat.format("hh:mm a", message.timestamp)
+            when (message.status) {
+                "sent" -> holder.imgStatus.setImageResource(R.drawable.ic_check_1_gray)
+                "received" -> holder.imgStatus.setImageResource(R.drawable.ic_check_2_gray)
+                "read" -> holder.imgStatus.setImageResource(R.drawable.ic_check_2_blue)
+            }
             holder.itemView.setOnLongClickListener {
                 onLongClick(message)
                 true
-            }
-
-            // Set status icon
-            when (message.status) {
-                "sent" -> holder.imgStatus.setImageResource(R.drawable.ic_check_1_gray)
-                "delivered" -> holder.imgStatus.setImageResource(R.drawable.ic_check_2_gray)
-                "read" -> holder.imgStatus.setImageResource(R.drawable.ic_check_2_blue)
             }
         } else if (holder is ReceivedMessageViewHolder) {
             holder.tvSenderName.text = senderName
@@ -78,7 +76,6 @@ class MessageAdapter(
             }
         }
     }
-
 
     override fun getItemCount(): Int {
         return messages.size

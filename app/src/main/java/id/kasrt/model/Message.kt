@@ -1,10 +1,12 @@
 package id.kasrt.model
 
+
+
 data class Message(
-    val messageId: String = "",
-    val senderId: String = "",
-    val senderName: String = "",
-    val messageText: String = "",
-    val timestamp: Long = 0L,
-    val status: String = "Sent"
+    var messageId: String = "",
+    var senderId: String = "",
+    var senderName: String = "",
+    var messageText: String = "",
+    var timestamp: Long = 0,
+    var status: String = "sent" // Default status
 )
