@@ -28,7 +28,7 @@ class ChatActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().getReference("messages")
         messages = mutableListOf()
-        adapter = MessageAdapter(messages) { message -> showDeleteAlert(message) }
+        adapter = MessageAdapter(messages, ::deleteMessage)
 
         binding.recyclerViewMessages.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewMessages.adapter = adapter
@@ -42,9 +42,7 @@ class ChatActivity : AppCompatActivity() {
         }
 
         currentUser = auth.currentUser?.email?.substringBefore("@")
-
         loadMessages()
-        updateMessageStatusToRead()
     }
 
     private fun sendMessage(messageText: String) {
@@ -66,65 +64,51 @@ class ChatActivity : AppCompatActivity() {
                 messages.clear()
                 for (messageSnapshot in snapshot.children) {
                     val message = messageSnapshot.getValue(Message::class.java)
-                    message?.let {
-                        if (it.senderId != auth.currentUser?.uid && it.status == "sent") {
-                            it.status = "received"
-                            database.child(it.messageId).child("status").setValue("received")
-                        }
-                        messages.add(it)
-                    }
+                    message?.let { messages.add(it) }
                 }
                 adapter.notifyDataSetChanged()
                 binding.recyclerViewMessages.scrollToPosition(messages.size - 1)
+                updateMessageStatusToRead()
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@ChatActivity, "Gagal memuat pesan", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ChatActivity, "Failed to load messages", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    private fun showDeleteAlert(message: Message) {
-        AlertDialog.Builder(this)
-            .setTitle("Hapus Pesan")
-            .setMessage("Apakah Anda yakin ingin menghapus pesan ini?")
-            .setPositiveButton("Yes") { dialog, _ ->
-                deleteMessage(message)
-                dialog.dismiss()
+    private fun updateMessageStatusToRead() {
+        val userId = auth.currentUser?.uid ?: return
+        messages.forEach { message ->
+            if (message.senderId != userId && !message.readBy.contains(userId)) {
+                message.readBy.add(userId)
+                message.status = "received"
+                database.child(message.messageId).setValue(message)
             }
-            .setNegativeButton("Batal") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
+        }
     }
 
     private fun deleteMessage(message: Message) {
         if (message.senderId == auth.currentUser?.uid) {
-            database.child(message.messageId).removeValue().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(this@ChatActivity, "Pesan berhasil dihapus.", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this@ChatActivity, "Gagal menghapus pesan", Toast.LENGTH_SHORT).show()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Delete Message")
+                .setMessage("Are you sure you want to delete this message?")
+                .setPositiveButton("Yes") { dialog, which ->
+                    database.child(message.messageId).removeValue().addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(this@ChatActivity, "Pesan berhasil dihapus", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this@ChatActivity, "Pesan gagal dihapus", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
-            }
+                .setNegativeButton("Cancel") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
         } else {
-            Toast.makeText(this@ChatActivity, "Anda tidak dapat menghapus pesan ini", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@ChatActivity, "Tidak dapat menghapus pesan ini", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun updateMessageStatusToRead() {
-        database.addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val message = snapshot.getValue(Message::class.java)
-                if (message != null && message.senderId != auth.currentUser?.uid && message.status == "received") {
-                    snapshot.ref.child("status").setValue("read")
-                }
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onChildRemoved(snapshot: DataSnapshot) {}
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onCancelled(error: DatabaseError) {}
-        })
     }
 }

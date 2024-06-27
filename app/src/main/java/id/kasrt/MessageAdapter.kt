@@ -29,6 +29,7 @@ class MessageAdapter(
         val tvSenderName: TextView = itemView.findViewById(R.id.tvSenderName)
         val tvMessageText: TextView = itemView.findViewById(R.id.tvMessageText)
         val tvTimestamp: TextView = itemView.findViewById(R.id.tvTimestamp)
+
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -57,11 +58,7 @@ class MessageAdapter(
             holder.tvSenderName.text = senderName
             holder.tvMessageText.text = message.messageText
             holder.tvTimestamp.text = android.text.format.DateFormat.format("hh:mm a", message.timestamp)
-            when (message.status) {
-                "sent" -> holder.imgStatus.setImageResource(R.drawable.ic_check_1_gray)
-                "received" -> holder.imgStatus.setImageResource(R.drawable.ic_check_2_gray)
-                "read" -> holder.imgStatus.setImageResource(R.drawable.ic_check_2_blue)
-            }
+            setReadStatus(holder.imgStatus, message)
             holder.itemView.setOnLongClickListener {
                 onLongClick(message)
                 true
@@ -79,5 +76,17 @@ class MessageAdapter(
 
     override fun getItemCount(): Int {
         return messages.size
+    }
+
+    private fun setReadStatus(imageView: ImageView, message: Message) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        imageView.setImageResource(
+            when {
+                message.status == "sent" && message.senderId == userId -> R.drawable.ic_check_1_gray
+                message.status == "received" && message.readBy.contains(userId) -> R.drawable.ic_check_2_gray
+                message.status == "received" && !message.readBy.contains(userId) -> R.drawable.ic_check_2_blue
+                else -> 0
+            }
+        )
     }
 }
