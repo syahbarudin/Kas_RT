@@ -77,6 +77,13 @@
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/teal_700"
                 android:text="Login" />
+            <Button
+                android:id="@+id/tv_to_face"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:backgroundTint="@color/teal_700"
+                android:text="Login via Face Recognition" />
 
             <TextView
                 android:layout_width="match_parent"

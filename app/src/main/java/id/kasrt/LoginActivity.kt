@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import id.kasrt.databinding.ActivityLoginBinding
+import id.kasrt.face.FaceRecognitionActivity
 import id.kasrt.ui.fragmentmain
 
 class LoginActivity : AppCompatActivity() {
@@ -30,6 +31,12 @@ class LoginActivity : AppCompatActivity() {
 
         binding.tvToRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.tvToFace.setOnClickListener {
+            val intent = Intent(this, FaceRecognitionActivity::class.java)
+            intent.putExtra("ACTION_TYPE", "LOGIN")
             startActivity(intent)
         }
 
