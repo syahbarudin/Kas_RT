@@ -14,7 +14,6 @@ interface ApiService {
     fun getUsers(): Call<ResponseUser<List<DataItem>>>
     @GET(".")
     fun getLaporanKeuangan(): Call<ResponseUser<LaporanKeuangan>>
-
     @GET(".")
     fun getCashflow(): Call<ResponseUser<List<CashflowItem>>>
 
