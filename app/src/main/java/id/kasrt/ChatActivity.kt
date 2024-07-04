@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import id.kasrt.adapter.MessageAdapter
 import id.kasrt.databinding.ActivityChatBinding
 import id.kasrt.model.Message
 

@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object ApiConfig {
-    private const val BASE_URL = "https://api.apispreadsheets.com/data/inXyDZFoJGkfSJjc/"
+    private const val BASE_URL = "AIzaSyCR7lc7JvzUPn1_mm-f3FEZaZkQERAJZDI"
 
     fun getApiService(): ApiService {
         val retrofit = Retrofit.Builder()
