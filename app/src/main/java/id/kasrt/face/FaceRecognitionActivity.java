@@ -5,13 +5,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.view.SurfaceView;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.google.mlkit.vision.common.InputImage;
@@ -20,6 +20,7 @@ import com.google.mlkit.vision.face.FaceDetection;
 import com.google.mlkit.vision.face.FaceDetector;
 import com.google.mlkit.vision.face.FaceDetectorOptions;
 
+import id.kasrt.LoginActivity;
 import id.kasrt.R;
 import id.kasrt.ui.fragmentmain;
 
@@ -29,6 +30,8 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
     private TextView tvStatus;
     private CameraSource cameraSource;
     private String actionType;
+
+    private static final String TAG = "FaceRecognitionActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +55,10 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
     }
 
     private void startCameraSource() {
-        cameraSource = new CameraSource(cameraPreview.getHolder(), this);
-        cameraSource.start();
+        if (cameraSource == null) {
+            cameraSource = new CameraSource(this, cameraPreview.getHolder(), this);
+        }
+        cameraSource.startCamera();
     }
 
     @Override
@@ -68,7 +73,15 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
 
     @Override
     public void onDetected(Bitmap bitmap) {
-        InputImage image = InputImage.fromBitmap(bitmap, 0);
+        Log.d(TAG, "onDetected: Bitmap detected");
+
+        if (bitmap == null) {
+            Log.e(TAG, "onDetected: Bitmap is null");
+            tvStatus.setText("Failed to capture image, please try again.");
+            return;
+        }
+
+        InputImage image = InputImage.fromBitmap(bitmap, 0); // adjust rotation as needed
         FaceDetectorOptions options = new FaceDetectorOptions.Builder()
                 .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
                 .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
@@ -79,6 +92,7 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
 
         detector.process(image)
                 .addOnSuccessListener(faces -> {
+                    Log.d(TAG, "onDetected: Faces detected: " + faces.size());
                     if (faces.size() > 0) {
                         Face face = faces.get(0);
                         if ("REGISTER".equals(actionType)) {
@@ -90,7 +104,10 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
                         tvStatus.setText("No face detected, please try again.");
                     }
                 })
-                .addOnFailureListener(e -> tvStatus.setText("Failed to detect face, please try again."));
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "onDetected: Face detection failed", e);
+                    tvStatus.setText("Failed to detect face, please try again.");
+                });
     }
 
     private void registerFace(Face face) {
@@ -107,10 +124,38 @@ public class FaceRecognitionActivity extends AppCompatActivity implements Camera
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: Resuming activity");
+        if (cameraSource != null) {
+            cameraSource.startCamera();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: Pausing activity");
         if (cameraSource != null) {
             cameraSource.stop();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: Destroying activity");
+        if (cameraSource != null) {
+            cameraSource.stopCamera();
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        // Navigasi ke LoginActivity ketika tombol kembali ditekan
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();  // Menghindari kembali ke FaceRecognitionActivity saat kembali dari LoginActivity
     }
 }

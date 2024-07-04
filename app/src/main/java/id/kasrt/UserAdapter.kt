@@ -39,7 +39,7 @@ class UserAdapter(private val users: MutableList<DataItem>) :
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val user = users[position]
 
-        holder.tvUserName.text = "${user.nama_depan} ${user.nama_belakang}"
+        holder.tvUserName.text = "${user.namaDepan} ${user.namaBelakang}"
         holder.tvEmail.text = user.email
         holder.tvAddress.text = user.alamat
     }
