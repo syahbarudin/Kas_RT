@@ -1,4 +1,4 @@
-package id.kasrt
+package id.kasrt.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import id.kasrt.R
 import id.kasrt.model.Message
 
 class MessageAdapter(

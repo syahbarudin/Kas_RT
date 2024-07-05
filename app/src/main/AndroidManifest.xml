@@ -46,6 +46,12 @@
         <activity android:name=".ChatActivity"
             android:exported="false"/>
 
+        <activity android:name=".DataWarga"
+            android:exported="false"/>
+
+        <activity android:name=".LaporanActivity"
+            android:exported="false"/>
+
         <activity android:name=".ui.fragmentmain"
             android:exported="false"/>
         <activity

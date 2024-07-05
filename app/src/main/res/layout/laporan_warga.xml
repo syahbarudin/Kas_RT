@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LaporanActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Laporan Warga"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="16dp"
+                android:textColor="@android:color/white"
+                android:background="@color/dark_blue" />
+
+            <EditText
+                android:id="@+id/etNamaDepan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nama Depan"
+                android:inputType="textPersonName"
+                android:layout_marginTop="8dp"/>
+
+            <EditText
+                android:id="@+id/etNamaBelakang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nama Belakang"
+                android:inputType="textPersonName"
+                android:layout_marginTop="8dp"/>
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:layout_marginTop="8dp"/>
+
+            <EditText
+                android:id="@+id/etAlamat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Alamat"
+                android:inputType="textPostalAddress"
+                android:layout_marginTop="8dp"/>
+
+            <EditText
+                android:id="@+id/etLaporan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Laporan"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top"
+                android:layout_marginTop="8dp"/>
+
+            <ImageView
+                android:id="@+id/imgPreview"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="16dp"
+                android:background="#E0E0E0"/>
+
+            <Button
+                android:id="@+id/btnChooseImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pilih Gambar"
+                android:layout_marginTop="8dp"/>
+
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kirim Laporan"
+                android:layout_marginTop="16dp"/>
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>

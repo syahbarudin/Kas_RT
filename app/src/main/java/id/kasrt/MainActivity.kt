@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.messaging.FirebaseMessaging
+import id.kasrt.adapter.WargaAdapter
 import id.kasrt.databinding.ActivityMainBinding
 import id.kasrt.model.DataItem
 import id.kasrt.model.ResponseUser
@@ -31,7 +32,7 @@ import retrofit2.Response
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var adapter: UserAdapter
+    private lateinit var adapter: WargaAdapter
     private lateinit var rvUsers: RecyclerView
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         rvUsers = findViewById(R.id.rv_users)
-        adapter = UserAdapter(mutableListOf())
+        adapter = WargaAdapter(mutableListOf())
 
         rvUsers.layoutManager = LinearLayoutManager(this)
         rvUsers.adapter = adapter
